@@ -6,19 +6,20 @@ using namespace std;
 #include <sstream>
 #include <unistd.h>
 #include <sys/types.h>
+#include "FileInfoUtils.h"
 
-std::string GetFilePath()
+std::string CFileInfoUtils::GetFilePath()
 {
     
 }
 
-bool FetchKeyVal()
+bool CFileInfoUtils::FetchKeyVal(std::string filePath)
 {
 // Read Key-value pairs from config files
 // For example: AuthServers=<IP>
     std::map<std::string, std::string> ConfigInfo;
     std::ifstream fs;
-    fs.open("pwd.txt");
+    fs.open(filePath);
     if(fs.good())
     {
         printf("\nFile is there!");

@@ -13,7 +13,11 @@ using namespace std;
 uid_t getuid(void);
 uid_t geteuid(void);
 
-void ParseCmdArgs(int argc, char* argv[], std::map<std::string, std::string>& cmdArgMap)
+// Argument to pass 
+#define PASSWD_FILE          "--filepath" 
+#define DOWNLOAD_URL            "--downloadUrl"
+
+bool ParseCmdArgs(int argc, char* argv[], std::map<std::string, std::string>& cmdArgMap)
 {
 	std::string cmdLine = "";
 
@@ -54,11 +58,28 @@ void ParseCmdArgs(int argc, char* argv[], std::map<std::string, std::string>& cm
 	}
 
 	// Log command line
-	std::cout << "ExecuteCommand: Command line - '" << cmdLine.c_str() << endl;
+	std::cout << "Command line - '" << cmdLine.c_str() << endl;
 
-	std::cout << "ExecuteCommand: Command arg map size - " << cmdArgMap.size();
+	std::cout << "Command arg map size - " << cmdArgMap.size();
 
-	return;
+    std::map<std::string, std::string>::iterator iter =  cmdArgMap.find(PASSWD_FILE);
+	if(iter != cmdArgMap.end())
+	{		
+		if(!iter->second.empty())
+		{
+			CFileInfoUtils::FetchKeyVal(iter->second);
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+
+	return true;
 }
 
 int main(int argc,char* argv[])
@@ -80,7 +101,7 @@ int main(int argc,char* argv[])
         std::string cmd = std::string(argv[1]);
 
         // don't pass in the first parameter
-        ParseCmdArgs(argc, argv, cmdArgsMap);
+        bool res = ParseCmdArgs(argc, argv+1, cmdArgsMap);
     }
     
     
